@@ -126,13 +126,12 @@ if log_terbaru:
 
     st.caption(f"Update terakhir: {waktu} (Sesi: {pasien_id})")
 
-    # Tampilkan Kotak Angka Besar
-    col1, col2, col3 = st.columns(3)
+# Tampilkan Kotak Angka Besar (Dibagi jadi 4 kolom agar Suhu masuk)
+    col1, col2, col3, col4 = st.columns(4)
     col1.metric("Tensi (SBP/DBP)", f"{sbp}/{dbp}", "mmHg")
     col2.metric("Heart Rate", f"{hr}", "bpm")
     col3.metric("SpO2 (Oksigen)", f"{spo2}", "%")
-
-    st.write("---")
+    col4.metric("Suhu Tubuh", f"{suhu}", "°C")
     
     # Tombol Eksekusi Manual
     if st.button("Kirim Laporan ke Grup Telegram Keluarga"):
@@ -145,13 +144,22 @@ if log_terbaru:
             kirim_notif_telegram(prediksi_status, sbp, dbp, hr, spo2)
             st.success("Peringatan Darurat berhasil ditembakkan ke Grup Telegram!")
 
-    # Tampilkan Grafik Tren Sesi Ini
+# Tampilkan Grafik Tren Sesi Ini
     if riwayat_lengkap:
         st.subheader("📈 Grafik Sesi Pemantauan Malam Ini")
         df_hist = pd.DataFrame.from_dict(riwayat_lengkap, orient='index')
-        # Tampilkan 30 data terakhir di grafik agar tidak menumpuk
-        df_hist = df_hist.tail(30)
-        st.line_chart(df_hist[['SBP', 'DBP', 'HR']])
-
-else:
-    st.info("Menunggu data masuk dari alat ESP32... Pastikan alat menyala dan dipakai di jari.")
+        
+        # TRIK AMAN: Hanya ambil kolom yang benar-benar ada di database saat ini
+        kolom_target = ['SBP', 'DBP', 'HR']
+        kolom_tersedia = [kolom for kolom in kolom_target if kolom in df_hist.columns]
+        
+        df_hist = df_hist.tail(30) # Tampilkan 30 data terakhir
+        
+        if len(kolom_tersedia) > 0:
+            # Pastikan datanya diubah ke format angka (numeric) agar grafik tidak error
+            for col in kolom_tersedia:
+                df_hist[col] = pd.to_numeric(df_hist[col], errors='coerce')
+                
+            st.line_chart(df_hist[kolom_tersedia])
+        else:
+            st.info("Menunggu data Tensi dan HR terekam penuh untuk membuat grafik...")
