@@ -10,8 +10,8 @@ from sklearn.neighbors import KNeighborsClassifier
 FIREBASE_URL = "https://knn-kardio-project-default-rtdb.asia-southeast1.firebasedatabase.app"
 FIREBASE_SECRET = "hioYtRxCiFwow18j8HNNsojBqJcLRuiflrt9mvHV"
 
-TELEGRAM_TOKEN = "TOKEN_ANDA"  # Masukkan Token dari BotFather
-CHAT_ID = "CHAT_ID_ANDA"       # Masukkan Chat ID Grup (lengkap dengan tanda minus)
+TELEGRAM_TOKEN = "8775738096:AAEH1D5qooF09FQPORt9bwiIkScHIP4YgBM"  # Masukkan Token dari BotFather
+CHAT_ID = "-5237787277"       # Masukkan Chat ID Grup (lengkap dengan tanda minus)
 
 # ==========================================
 # 2. MELATIH MODEL KNN (Dokter Virtual)
