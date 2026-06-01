@@ -131,7 +131,7 @@ if log_terbaru:
     col1.metric("Tensi (SBP/DBP)", f"{sbp}/{dbp}", "mmHg")
     col2.metric("Heart Rate", f"{hr}", "bpm")
     col3.metric("SpO2 (Oksigen)", f"{spo2}", "%")
-    col4.metric("Suhu Tubuh", f"{suhu}", "°C")
+    col4.metric("Suhu Tubuh", f"{float(suhu):.1f}", "°C")
     
     # Tombol Eksekusi Manual
     if st.button("Kirim Laporan ke Grup Telegram Keluarga"):
