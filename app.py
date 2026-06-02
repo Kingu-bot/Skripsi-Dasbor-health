@@ -161,14 +161,17 @@ if log_terbaru:
         st.subheader("📈 Grafik Sesi Pemantauan Malam Ini")
         df_hist = pd.DataFrame.from_dict(riwayat_lengkap, orient='index')
         
-        # TRIK AMAN: Hanya ambil kolom yang benar-benar ada di database saat ini
+        # PERBAIKAN: Ubah sumbu X dari ID Firebase menjadi Waktu (Jam/Tanggal)
+        if 'Waktu' in df_hist.columns:
+            df_hist = df_hist.set_index('Waktu')
+        
+        # TRIK AMAN: Hanya ambil kolom yang benar-benar ada di database
         kolom_target = ['SBP', 'DBP', 'HR']
         kolom_tersedia = [kolom for kolom in kolom_target if kolom in df_hist.columns]
         
         df_hist = df_hist.tail(30) # Tampilkan 30 data terakhir
         
         if len(kolom_tersedia) > 0:
-            # Pastikan datanya diubah ke format angka (numeric) agar grafik tidak error
             for col in kolom_tersedia:
                 df_hist[col] = pd.to_numeric(df_hist[col], errors='coerce')
                 
