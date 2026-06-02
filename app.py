@@ -51,20 +51,38 @@ def latih_model_knn():
 knn_model = latih_model_knn()
 
 # ==========================================
-# 3. FUNGSI KIRIM PERINGATAN TELEGRAM
+# 3. FUNGSI KIRIM TELEGRAM (LENGKAP)
 # ==========================================
-def kirim_notif_telegram(status, sbp, dbp, hr, spo2):
-    # Jika normal, tidak perlu kirim pesan agar keluarga tidak panik/terganggu
-    if status == "Normal":
+def kirim_notif_telegram(status, sbp, dbp, hr, spo2, suhu, is_manual=False):
+    # Jika normal dan sistem berjalan otomatis, jangan kirim pesan agar tidak spam.
+    # Tapi JIKA ditekan manual lewat tombol (is_manual=True), tetap kirimkan.
+    if status == "Normal" and not is_manual:
         return 
 
-    simbol = "🟡" if status == "Hipertensi Ringan" else "🔴 🚨"
-    pesan = f"{simbol} *PERINGATAN KESEHATAN LANSIA* {simbol}\n\n"
-    pesan += f"Sistem Cerdas mendeteksi status: *{status}*\n\n"
-    pesan += f"🩸 Tensi (BP): {sbp}/{dbp} mmHg\n"
-    pesan += f"💓 Detak Jantung: {hr} bpm\n"
-    pesan += f"🫁 Oksigen (SpO2): {spo2}%\n\n"
-    pesan += "Mohon segera cek kondisi fisik Kakek/Nenek sekarang juga!"
+    if status == "Normal":
+        simbol = "✅ 🟢"
+        header = "LAPORAN HARIAN KESEHATAN LANSIA"
+    elif status == "Hipertensi Ringan":
+        simbol = "⚠️ 🟡"
+        header = "PERINGATAN: KONDISI WASPADA"
+    else:
+        simbol = "🚨 🔴"
+        header = "BAHAYA: KONDISI DARURAT!"
+
+    pesan = f"{simbol} *{header}* {simbol}\n\n"
+    pesan += f"Status Diagnosa KNN: *{status}*\n\n"
+    pesan += f"🩸 Tensi (SBP/DBP): {sbp}/{dbp} mmHg\n"
+    pesan += f"💓 Heart Rate: {hr} bpm\n"
+    pesan += f"🫁 SpO2 (Oksigen): {spo2}%\n"
+    pesan += f"🌡️ Suhu Tubuh: {float(suhu):.1f} °C\n\n"
+    
+    # Catatan Kustom Berdasarkan Status
+    if status == "Normal":
+        pesan += "Catatan: Kondisi Kakek/Nenek stabil malam ini. Lanjutkan istirahat."
+    elif status == "Hipertensi Ringan":
+        pesan += "Catatan: Tensi sedikit tinggi. Pastikan obat malam sudah diminum."
+    else:
+        pesan += "Catatan: Mohon segera cek kondisi fisik Kakek/Nenek sekarang juga!"
     
     url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
     payload = {"chat_id": CHAT_ID, "text": pesan, "parse_mode": "Markdown"}
