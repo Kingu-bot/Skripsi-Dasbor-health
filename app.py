@@ -78,11 +78,11 @@ def kirim_notif_telegram(status, sbp, dbp, hr, spo2, suhu, is_manual=False):
     
     # Catatan Kustom Berdasarkan Status
     if status == "Normal":
-        pesan += "Catatan: Kondisi Kakek/Nenek stabil malam ini. Lanjutkan istirahat."
+        pesan += "Catatan: Kondisi stabil ."
     elif status == "Hipertensi Ringan":
-        pesan += "Catatan: Tensi sedikit tinggi. Pastikan obat malam sudah diminum."
+        pesan += "Catatan: Tensi sedikit tinggi."
     else:
-        pesan += "Catatan: Mohon segera cek kondisi fisik Kakek/Nenek sekarang juga!"
+        pesan += "Catatan: Mohon segera cek sekarang juga!"
     
     url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
     payload = {"chat_id": CHAT_ID, "text": pesan, "parse_mode": "Markdown"}
