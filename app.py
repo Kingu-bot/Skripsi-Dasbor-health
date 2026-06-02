@@ -60,21 +60,21 @@ def kirim_notif_telegram(status, sbp, dbp, hr, spo2, suhu, is_manual=False):
         return 
 
     if status == "Normal":
-        simbol = "✅ 🟢"
+        simbol = "🟢"
         header = "LAPORAN HARIAN KESEHATAN LANSIA"
     elif status == "Hipertensi Ringan":
-        simbol = "⚠️ 🟡"
+        simbol = "🟡"
         header = "PERINGATAN: KONDISI WASPADA"
     else:
-        simbol = "🚨 🔴"
+        simbol = "🔴"
         header = "BAHAYA: KONDISI DARURAT!"
 
     pesan = f"{simbol} *{header}* {simbol}\n\n"
     pesan += f"Status Diagnosa KNN: *{status}*\n\n"
-    pesan += f"🩸 Tensi (SBP/DBP): {sbp}/{dbp} mmHg\n"
-    pesan += f"💓 Heart Rate: {hr} bpm\n"
-    pesan += f"🫁 SpO2 (Oksigen): {spo2}%\n"
-    pesan += f"🌡️ Suhu Tubuh: {float(suhu):.1f} °C\n\n"
+    pesan += f"Tensi (SBP/DBP): {sbp}/{dbp} mmHg\n"
+    pesan += f"Heart Rate: {hr} bpm\n"
+    pesan += f"SpO2 (Oksigen): {spo2}%\n"
+    pesan += f"Suhu Tubuh: {float(suhu):.1f} °C\n\n"
     
     # Catatan Kustom Berdasarkan Status
     if status == "Normal":
@@ -114,9 +114,9 @@ def ambil_data_terbaru():
 # ==========================================
 # 5. ANTARMUKA WEB (UI DASHBOARD)
 # ==========================================
-st.set_page_config(page_title="Monitor Kardio", page_icon="❤️", layout="centered")
+st.set_page_config(page_title="Monitor Kardio", layout="centered")
 
-st.title("❤️ Dasbor Pemantauan Lansia")
+st.title("Dasbor Pemantauan Lansia")
 st.write("Sistem Analisis Cerdas *K-Nearest Neighbors* (KNN)")
 st.write("---")
 
