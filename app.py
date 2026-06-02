@@ -153,15 +153,9 @@ if log_terbaru:
     
     # Tombol Eksekusi Manual
     if st.button("Kirim Laporan ke Grup Telegram Keluarga"):
-        if prediksi_status == "Normal":
-            # Paksa kirim jika ditekan manual meski statusnya normal
-            url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
-            requests.post(url, data={"chat_id": CHAT_ID, "text": f"✅ Laporan Manual: Kondisi Kakek/Nenek {prediksi_status}. Tensi: {sbp}/{dbp} mmHg."})
-            st.success("Laporan harian terkirim ke Telegram!")
-        else:
-            kirim_notif_telegram(prediksi_status, sbp, dbp, hr, spo2)
-            st.success("Peringatan Darurat berhasil ditembakkan ke Grup Telegram!")
-
+        # Kita panggil fungsinya dengan tambahan parameter suhu dan status is_manual=True
+        kirim_notif_telegram(prediksi_status, sbp, dbp, hr, spo2, suhu, is_manual=True)
+        st.success("Laporan harian lengkap berhasil dikirim ke Telegram!")
 # Tampilkan Grafik Tren Sesi Ini
     if riwayat_lengkap:
         st.subheader("📈 Grafik Sesi Pemantauan Malam Ini")
